@@ -1,0 +1,5 @@
+1.Add automatic youtube downloader function with start and stop timestamp options
+2.Add clap command tracking across users and add the ability to see most called command
+3.Add dynamic server specific file system, with the ability for admins to create and link their own custom folders
+4.Add limits or thesholds / voting system for large servers
+5.Deploy bot to a cloud web service
