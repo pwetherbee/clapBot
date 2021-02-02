@@ -1,0 +1,111 @@
+@bot.command(name="Help")
+async def on_message(ctx):
+    cmd_list = ['booty', 'toes', 'tinder', 'salt', 'cheeks', 'comrade', 'carl',
+                'gabagool', 'catcharide', 'chug', 'destroy (headphones recommended)',
+                 'rwiki', 'cartoon', 'noice', 'gotem', 'jeb', 'bernie', 'trump']
+    response = "The following commands are : \n" + '\n'.join(cmd_list)
+    await ctx.send(response)
+
+@bot.command(name='bernie')
+async def on_message(ctx):
+    response = get_quote('Bernie Sanders')
+    url = get_image('Bernie sanders dank meme')
+    await ctx.message.add_reaction('👏') 
+    await ctx.send(url)   
+    await ctx.send(f"\"{response}\" - Bernie")
+
+@bot.command(name="booty" ,help = "claps a random persons cheeks")
+async def on_message(ctx):
+    response = "you just clapped someones booty"
+    await ctx.message.add_reaction('👏')
+    await ctx.send(response)
+
+@bot.command(name='cartoon')
+async def on_message(ctx):
+    cartoons = ["Avatar the last air bender", "samurai jack", "INVADER ZIM", "TEEN TITANS", "FOSTER'S HOME FOR IMAGINARY FRIENDS", "KIM POSSIBLE", "MY LIFE AS A TEENAGE ROBOT", 
+                "DANNY PHANTOM", "STAR WARS: CLONE WARS", "THE GRIM ADVENTURES OF BILLY AND MANDY", "DAVE THE BARBARIAN", "THE FAIRLY ODDPARENTS", "HOMESTAR RUNNER", "ed ed and eddy",
+                "courage the cowardly dog"]
+    cartoon = random.choice(cartoons)
+    response = get_image(cartoon, image_type='AnimatedGif')
+    #await ctx.send(f'!play {cartoon} theme song')  
+    await ctx.message.add_reaction('👏')
+    await ctx.send(cartoon)
+    await ctx.send(response)
+
+@bot.command(name='chug')
+async def on_message(ctx):
+    response = get_image('badlands chugs',image_type='AnimatedGif')  
+    await ctx.message.add_reaction('🚫')
+    await ctx.message.add_reaction('👉')
+    await ctx.message.add_reaction('🐁')
+    await ctx.send("dont touch that mouse")  
+    await ctx.send(response)
+    await playmp3(ctx, "mouse.mp3")
+
+
+@bot.command(name='eyebleach')
+async def on_message(ctx):
+    opts = ['puppy', 'kitten', 'lizard', 'hedgehog', 'sugarglider', 'snake']
+    op = 'cute ' + random.choice(opts)
+    types = ['AnimatedGif', None]
+    t = random.choice(types)
+    response = get_image(op, safe_search='Strict', image_type=t)
+    await ctx.message.add_reaction('👏')    
+    await ctx.send(response)
+
+
+@bot.command(name='jeb')
+async def on_message(ctx):
+    response = get_quote('Jeb Bush')
+    url = get_image('Jeb Bush meme')
+    await ctx.message.add_reaction('👏') 
+    await ctx.send(url)   
+    await ctx.send(f"\"{response}\" - Jeb")
+
+@bot.command(name='kick')
+async def mp3play(ctx):
+    vc = ctx.voice_client
+    if not vc:
+        await ctx.send("I am not in a voice channel")
+        return
+    vc.disconnect()
+
+
+@bot.command(name='tinder')
+async def on_message(ctx):
+    types = ['sexy', 'unnatractive', 'plain', 'basic', 'fat', 'thicc', 'nerdy', '']
+    races = ['white', 'asian', 'black', 'latina','middle eastern', '']
+    gender = ['woman', 'woman', 'girl', 'milf','grandma','man', 'trap']
+
+    full = ' '.join([random.choice(types),random.choice(races),random.choice(gender),'selfie'])
+    print(full)
+
+    response = get_image(full, image_content='Face')
+    await ctx.message.add_reaction('👏')  
+    await ctx.send(response) 
+    await ctx.send("↔") 
+
+
+@bot.command(name='trump')
+async def on_message(ctx):
+    response = get_quote('Donald Trump on social media')
+    url = get_image('Donald Trump hair')
+    await ctx.message.add_reaction('👏') 
+    await ctx.send(url)   
+    await ctx.send(f"\"{response}\" - Donald J. Trump")
+
+def get_image(search_term, image_content = None, safe_search='off', image_type=None): #returns a single random url for a given search term
+    """
+    image_results = client.images.search(image_content = image_content ,query=search_term, safe_search=safe_search, image_type=image_type)
+    if image_results.value:
+        first_image_result = random.choice(image_results.value)
+        print("Total number of images returned: {}".format(len(image_results.value)))
+        print("First image thumbnail url: {}".format(first_image_result.thumbnail_url))
+        return first_image_result.content_url
+        print("First image content url: {}".format(first_image_result.content_url))
+    else:
+        print("No image results returned!")
+        return f'No images found for {search_term}, try again'
+    """
+
+    return "images are out of order - sorry for the inconvenience!"
