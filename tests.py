@@ -48,7 +48,7 @@ def convertAndDownloadURL(url, start, stop, fileName, folderPath=path):
         output_path=folderPath, filename="temp.m4a", skip_existing=False
     )
     print("\n Path to downloaded audio file: \n", dl)
-    ffmpegCommands = f'ffmpeg -ss {start} -i "{dl}" -t {diff} -c:a copy -acodec libmp3lame -ab 256k {folderPath}{fileName}.mp3'
+    ffmpegCommands = f'ffmpeg -ss {start} -i "{dl}" -t {diff} -c:a copy -acodec libmp3lame -ab 256k "{folderPath}{fileName}.mp3"'
     # if start and stop not specified, just download the entire clip
 
     os.system(ffmpegCommands)

@@ -6,6 +6,7 @@ import asyncio
 import json
 import random
 import wikiquote
+import youtubeHelper as yth
 from time import sleep
 from discord import FFmpegPCMAudio
 from dotenv import load_dotenv
@@ -143,6 +144,7 @@ async def showNew(ctx):
     popDict = readFile()
     allFiles = getRanks(popDict, "bottom")
     onlyNew = getTiersAndPlays(popDict, allFiles, "🆕")
+    await ctx.message.add_reaction("👏")
     await ctx.send(formatMessage("New", onlyNew))
 
 
@@ -163,7 +165,7 @@ async def userInfo(ctx):
 
 
 @bot.command(name=h + "fx")
-async def dislpaySoundFX(ctx):
+async def displaySoundFX(ctx):
     await ctx.message.add_reaction("👏")
     await ctx.send(f"spam, weird, radio, fast, slow, reverse")
 
@@ -176,6 +178,55 @@ async def on_message(ctx):
 
 
 """
+Bot commands for adding audio files
+"""
+
+
+@bot.command(name=h + "add")
+async def addFileWithUrl(ctx, *args):
+    await ctx.message.add_reaction("👏")
+    if len(args) == 0:
+        await ctx.send(yth.getCmdFormat())
+        return
+    try:
+        params = yth.parseYTDLRequestInput(args)
+    except ValueError as e:
+        await ctx.send(e)
+        return
+    filename = params[-1] + ".mp3"
+    if filename in getMp3s():
+        await ctx.send(
+            f"The command with the name {args[-1]} already exists! are you sure you would like to overwrite? type (y/n)"
+        )
+
+        def check(message):
+            return message.content == "y" or message.content == "n"
+
+        try:
+            confirm = await bot.wait_for("message", timeout=20, check=check)
+        except asyncio.TimeoutError:
+            await ctx.message.add_reaction("⌛")
+            return
+        print(confirm)
+        if not confirm or not confirm.content == "y":
+            await ctx.send("command creation canceled")
+            return
+    try:
+        print("ok")
+        yth.convertAndDownloadURL(*params, folderPath=audioPath)
+    except:
+        await ctx.send("Invalid input")
+        await ctx.send(yth.getCmdFormat())
+        return
+    # yth.convertAndDownloadURL(*params, folderPath=audioPath)
+    name = args[-1]
+    await ctx.send(
+        f"You successfully added the command {name}, try it out using: clap {name} !"
+    )
+    print(f"{name} has been successfully added to the command pool")
+
+
+"""
 Helper Functions - Be sure to call with the await keyword(decorator?) if they are commands
 """
 
@@ -183,6 +234,7 @@ Helper Functions - Be sure to call with the await keyword(decorator?) if they ar
 def getMp3s(path=audioPath):
     print("Searching files in directory...", path, "\n")
     files = set(os.listdir(path))
+    files.discard("tempm4a.mp4")
     return files
 
 
