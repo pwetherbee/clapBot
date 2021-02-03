@@ -81,7 +81,7 @@ async def randomMp3(ctx):
 
 
 
-#command for stopping audio and disconnecting bot from voice channel
+#command for stopping audio and disconnecting bot from voice channel, command will be clapstop
 @bot.command(name = h + 'stop')
 async def stop(ctx):
     await ctx.message.add_reaction('✋')
@@ -96,7 +96,7 @@ async def stop(ctx):
 Bot Info Commands: Search, numplays, new and top
 '''
 
-#main command for searching mp3s
+#main command for searching mp3s command will be claps
 @bot.command(name = h + 's')
 async def searchMp3(ctx, arg=''):
     searchResults = search(arg)
@@ -109,7 +109,7 @@ async def searchMp3(ctx, arg=''):
     withTiers = getTiersAndPlays(popDict, searchResults[:50])
     await ctx.send(formatMessage(arg,withTiers))
 
-#show most played mp3s
+#show most played mp3s, command will be claptop
 @bot.command(name=h +'top')
 async def showRanks(ctx, arg='10'):
     if arg == 'users':
@@ -348,3 +348,4 @@ function that returns the number of plays and tiers for all mp3s (add to search 
 
 
 #TODO: add a theshold function for large servers, add funtion using pytube to download youtube clips with timestamps and custom titles
+#add support for different file types such as aac and m4a files
