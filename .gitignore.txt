@@ -1,6 +1,0 @@
-### dotenv ###
-.env
-### trackers ###
-tracker/
-### temps ###
-tempAudioFiles/

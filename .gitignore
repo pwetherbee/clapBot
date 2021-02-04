@@ -1,2 +1,6 @@
 
 .env
+### trackers ###
+tracker/
+### temps ###
+tempAudioFiles/
