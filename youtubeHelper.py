@@ -2,7 +2,7 @@ import os
 from pytube import YouTube
 
 path = "tempAudioFiles/"
-cmdFormat = "clapadd <url>* <start> <stop> <name>* --- *url and name are required, start and stop time are in seconds and are optional\n for example:\n(clapadd https://www.youtube.com/watch?v=POFHXEOdZXU 100 120 synthcrazy)\nor (clapadd https://www.youtube.com/watch?v=POFHXEOdZXU synthcrazy)"
+cmdFormat = "clapadd <url>* <start> <stop> <name>* --- *url and name are required, start and stop time are in seconds and are optional\nfor example:\nclapadd https://www.youtube.com/watch?v=POFHXEOdZXU 100 120 synthcrazy\nclapadd https://youtu.be/xIarrG9ZO4I salt"
 
 
 def getCmdFormat():
@@ -27,12 +27,11 @@ def convertAndDownloadURL(url, start, stop, fileName, folderPath=path):
         start = int(start)
         stop = int(stop)
     except ValueError:
-        print("Invalid start or stop values!")
+        e = "Invalid start or stop values!"
+        raise ValueError(e)
     if start >= stop:
         print(start, stop)
-        e = "Start time is greater than end time!"
-        print(e)
-        return e
+        raise ValueError("Start time is greater than end time!")
     diff = stop - start
     streams = yt.streams.filter(only_audio=True).first()
     dl = streams.download(
@@ -49,9 +48,7 @@ def convertAndDownloadURL(url, start, stop, fileName, folderPath=path):
 def parseYTDLRequestInput(args):
     url = start = stop = filename = None
     if len(args) < 2:  # invalid number of arguments
-        raise ValueError(
-            "Too few parameters! Type out your requested mp3 in the format *url *start *stop *(the name you would like to use- NO spaces!)"
-        )
+        raise ValueError("Too few parameters!")
     elif (
         len(args) == 2
     ):  # assume it is in the format *url *filename and the user wants to download the entire clip
@@ -67,7 +64,5 @@ def parseYTDLRequestInput(args):
         stop = args[2]
         filename = args[3]
     else:
-        raise ValueError(
-            "Too few parameters! Type out your requested mp3 in the format *url *start *stop *(the name you would like to use- NO spaces!)"
-        )
+        raise ValueError("Too many parameters!")
     return [url, start, stop, filename]

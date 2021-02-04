@@ -186,12 +186,12 @@ Bot commands for adding audio files
 async def addFileWithUrl(ctx, *args):
     await ctx.message.add_reaction("👏")
     if len(args) == 0:
-        await ctx.send(yth.getCmdFormat())
+        await ctx.send(f"```{yth.getCmdFormat()}```")
         return
     try:
         params = yth.parseYTDLRequestInput(args)
     except ValueError as e:
-        await ctx.send(e)
+        await ctx.send(f"```Invalid input: {e}\n{yth.getCmdFormat()}```")
         return
     filename = params[-1] + ".mp3"
     if filename in getMp3s():
@@ -214,9 +214,11 @@ async def addFileWithUrl(ctx, *args):
     try:
         print("ok")
         yth.convertAndDownloadURL(*params, folderPath=audioPath)
+    except ValueError as e:
+        await ctx.send(f"```Invalid input: {e}\n{yth.getCmdFormat()}```")
+        return
     except:
-        await ctx.send("Invalid input")
-        await ctx.send(yth.getCmdFormat())
+        await ctx.send(f"```Invalid input\n{yth.getCmdFormat()}```")
         return
     # yth.convertAndDownloadURL(*params, folderPath=audioPath)
     name = args[-1]
