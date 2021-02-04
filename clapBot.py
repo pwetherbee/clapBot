@@ -107,6 +107,8 @@ async def searchMp3(ctx, arg=""):
         return
     popDict = readFile()  # reads popularity text file
     withTiers = getTiersAndPlays(popDict, searchResults[:50])
+    if arg == "":
+        await ctx.send(f"There are {len(popDict)} clap commands in this server! Wow!")
     await ctx.send(formatMessage(arg, withTiers))
 
 

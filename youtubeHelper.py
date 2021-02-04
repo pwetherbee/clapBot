@@ -14,7 +14,7 @@ def convertAndDownloadURL(url, start, stop, fileName, folderPath=path):
     url = str(url)
     yt = YouTube(url)
     if (
-        yt.length > 60 * 20
+        yt.length > 60 * 40
     ):  # if video is over 20 mins, dont allow any download whatsoever
         e = "Youtube clip is too long!"
         print(e)
@@ -24,8 +24,8 @@ def convertAndDownloadURL(url, start, stop, fileName, folderPath=path):
     if not stop:
         stop = yt.length
     try:  # try to convert to numbers
-        start = int(start)
-        stop = int(stop)
+        start = float(start)
+        stop = float(stop)
     except ValueError:
         e = "Invalid start or stop values!"
         raise ValueError(e)

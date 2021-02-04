@@ -3,3 +3,13 @@
 3.Add dynamic server specific file system, with the ability for admins to create and link their own custom folders
 4.Add limits or thesholds / voting system for large servers
 5.Deploy bot to a cloud web service
+6.Improve help command and add help page for calling just "clap", "claph", "claphelp", "clap help"
+7.Improve clapadd help readability
+8.Add better timestamp support for clapadd
+9.Add masterlist with page support to list all available commands
+10.Add caching system for clapadd to speed up editing time (using a queue?)
+11.Add a tagging system for commands and 
+12.Allow clapr to use audio filtering and call by tag
+12.Move utility functions to their own specific files
+13.Add secret so that the .env file can be hidden
+14.Add licensing and legal info
