@@ -1,4 +1,4 @@
-1.Add automatic youtube downloader function with start and stop timestamp options
+1.Add automatic youtube downloader function with start and stop timestamp options #done, could use improvements SEE (8,10)
 2.Add clap command tracking across users and add the ability to see most called command
 3.Add dynamic server specific file system, with the ability for admins to create and link their own custom folders
 4.Add limits or thesholds / voting system for large servers
@@ -8,8 +8,14 @@
 8.Add better timestamp support for clapadd
 9.Add masterlist with page support to list all available commands
 10.Add caching system for clapadd to speed up editing time (using a queue?)
-11.Add a tagging system for commands and 
+11.Add a tagging system for commands (and users?)
 12.Allow clapr to use audio filtering and call by tag
 12.Move utility functions to their own specific files
-13.Add secret so that the .env file can be hidden
+13.Add secret so that the .env file can be hidden #done
 14.Add licensing and legal info
+15.Add command to add effects onto currently playing mp3s
+16.Make global and local sound effects to users or servers, give a list and associated tag
+17.Add settings for server admins to restrict or ban certain sound fx
+18.Add ability for an admin role to remove or hide files from their servers directory
+19.Move stats onto sql server
+20.Create simple bot website
