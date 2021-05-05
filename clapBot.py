@@ -21,6 +21,7 @@ from discord.ext import commands
 load_dotenv()
 TOKEN = os.getenv("DISCORD_TOKEN", "token does not exist")
 GUILD = os.getenv("DISCORD_GUILD", "guild name does not exist")
+ADMIN_CODE = os.getenv("ADMIN_CODE", "admin code could not be found")
 # subscription_key = os.getenv("SUBSCRIPTION_KEY", "subscription key does not exist") #found on microsoft azure
 # subscription_endpoint = os.getenv("SUBSCRIPTION_ENDPOINT", "subscription endpoint does not exist")
 
@@ -37,8 +38,23 @@ h = "ap"  # hack I used to create generic commands
 
 @bot.event
 async def on_ready():
+    line = "......................."
+    print(line)
     print(f"{bot.user} has connected to discord!")
+    clapCommands, users = readFile(popTrackPath), readFile(userAcctPath)
+    print(line)
+    print(
+        f"There are currently {len(clapCommands)} clap commands and {len(userAcctPath)} users"
+    )
+    print(line)
+    print(GUILD)
     guild = discord.utils.get(bot.guilds, name=GUILD)
+    allGuilds = discord.utils.get(bot.guilds)
+    # for guild in allGuilds:
+    #     print(guild.name)
+    # for guild in bot.fetch_guilds():
+    #     print(guild)
+    print()
     print(f"Bot is connected to the {guild} server")
 
 
@@ -75,11 +91,13 @@ async def playIt(ctx, *args):
 
 # command for playing a randomly chosen mp3
 @bot.command(name=h + "r")
-async def randomMp3(ctx):
+async def randomMp3(ctx, arg="1"):
     await ctx.message.add_reaction("🎲")
-    x = random.choice(list(getMp3s()))
-    addIndexToFile(x)
-    await playmp3(ctx, x)
+    for i in range(int(arg)):
+        x = random.choice(list(getMp3s()))
+        addIndexToFile(x)
+        await playmp3(ctx, x)
+        await ctx.send(f"({x})")
 
 
 # command for stopping audio and disconnecting bot from voice channel, command will be clapstop
@@ -230,6 +248,44 @@ async def addFileWithUrl(ctx, *args):
     print(f"{name} has been successfully added to the command pool")
 
 
+@bot.command(name=h + "delete")
+async def delete(ctx, keyword=""):
+    # check if command exists
+
+    if not isValidMp3(keyword):
+        await ctx.send(f"That clap command ({keyword}) doesn't exist!")
+        return
+    # wait for user confirmation
+    await ctx.message.add_reaction("👏")
+    await ctx.send(
+        f"Are you sure you would like to delete the command {keyword}? enter the 4 digit admin code"
+    )
+
+    def check(message):
+        msg = message.content
+        return len(msg) is 4 and msg.isnumeric()
+
+    try:
+        confirm = await bot.wait_for("message", timeout=20, check=check)
+    except asyncio.TimeoutError:
+        await ctx.message.add_reaction("⌛")
+        return
+    if not confirm or not confirm.content == ADMIN_CODE:
+        await ctx.send(f"```invalid code, command deletion canceled```")
+        return
+
+    # remove the file
+    deleteFile(audioPath + f"{keyword}.mp3")
+    tempDict = readFile(popTrackPath)
+    del tempDict[f"{keyword}.mp3"]
+
+    # await confirm.delete()
+    await confirm.add_reaction("✅")
+    await ctx.send(f"You successfully deleted the command {keyword}.")
+
+    await ctx.message.add_reaction("🚮")
+
+
 """
 Helper Functions - Be sure to call with the await keyword(decorator?) if they are commands
 """
@@ -254,7 +310,6 @@ def formatMessage(arg, items):
 
 
 def isValidMp3(fileName):
-    print(fileName + ".mp3")
     return fileName + ".mp3" in getMp3s(audioPath)
 
 
@@ -344,6 +399,20 @@ def readFile(path=popTrackPath):
         return json.loads(file.read())
 
 
+def writeToFile(dict, path=popTrackPath):
+    if type(dict) is not dict:
+        print("Value type error, must write dict item to file")
+    with open(path, "w") as file:
+        file.write(json.dumps(dict))
+
+
+def deleteFile(path):
+    if os.path.exists(path):
+        os.remove(path)
+    else:
+        print(f"File does not exist in the path {path}")
+
+
 def addIndexToFile(key, path=popTrackPath):
     with open(path, "r") as file:
         # print(file.read())
@@ -404,9 +473,9 @@ def checkTier(plays):
     if plays < 75:
         return "🥈"
     if plays < 100:
-        return "💯"
-    if plays < 125:
         return "🥇"
+    if plays < 125:
+        return "💯"
     if plays < 150:
         return "💎"
     if plays < 200:
