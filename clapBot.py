@@ -12,20 +12,11 @@ from discord import FFmpegPCMAudio
 from dotenv import load_dotenv
 from discord.ext import commands
 
-# from azure.cognitiveservices.search.imagesearch import ImageSearchClient
-# from msrest.authentication import CognitiveServicesCredentials
-
-# subscription_key = "4535d83c67544af3bf4fd58994ca578a"
-# subscription_endpoint = "https://discordbotimagesearch.cognitiveservices.azure.com/"
 
 load_dotenv()
 TOKEN = os.getenv("DISCORD_TOKEN", "token does not exist")
 GUILD = os.getenv("DISCORD_GUILD", "guild name does not exist")
 ADMIN_CODE = os.getenv("ADMIN_CODE", "admin code could not be found")
-# subscription_key = os.getenv("SUBSCRIPTION_KEY", "subscription key does not exist") #found on microsoft azure
-# subscription_endpoint = os.getenv("SUBSCRIPTION_ENDPOINT", "subscription endpoint does not exist")
-
-# client = ImageSearchClient(endpoint=subscription_endpoint, credentials=CognitiveServicesCredentials(subscription_key)) #connect to image client
 
 bot = commands.Bot(command_prefix="cl")
 
@@ -49,11 +40,6 @@ async def on_ready():
     print(line)
     print(GUILD)
     guild = discord.utils.get(bot.guilds, name=GUILD)
-    allGuilds = discord.utils.get(bot.guilds)
-    # for guild in allGuilds:
-    #     print(guild.name)
-    # for guild in bot.fetch_guilds():
-    #     print(guild)
     print()
     print(f"Bot is connected to the {guild} server")
 
