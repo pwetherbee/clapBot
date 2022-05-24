@@ -16,7 +16,7 @@ const commands = [
     .setName("clap")
     .setDescription("Replies with clap command")
     .addStringOption((option) =>
-      option.setName("input").setDescription("Enter a string")
+      option.setName("input").setDescription("Enter a string").setRequired(true)
     ),
   new SlashCommandBuilder()
     .setName("stop")
@@ -25,7 +25,10 @@ const commands = [
     .setName("clapsearch")
     .setDescription("Returns a list of clap commands")
     .addIntegerOption((option) =>
-      option.setName("page").setDescription("Enter a page number")
+      option
+        .setName("page")
+        .setDescription("Enter a page number")
+        .setRequired(true)
     ),
   new SlashCommandBuilder()
     .setName("server")

@@ -15,7 +15,7 @@ module.exports = {
     .setName("clap")
     .setDescription("Replies with a audio!")
     .addStringOption((option) =>
-      option.setName("input").setDescription("Enter a string")
+      option.setName("input").setDescription("Enter a string").setRequired(true)
     ),
   async execute(interaction) {
     const string = interaction.options.getString("input");
@@ -44,19 +44,15 @@ async function playAudio(channelId, guildId, voiceAdapterCreator, link) {
   const player = createAudioPlayer();
   connection.subscribe(player);
 
-  console.log(join(__dirname, "../", "audio", `${link}.mp3`));
-
-  console.log("joined channel");
-
   let resource;
 
   if (link.startsWith("https://")) {
-    const stream = ytdl(link, { filter: "audioonly", type: "opus" });
-    resource = createAudioResource(stream, { seek: 0, volume: 1 });
+    const stream = ytdl(link, { filter: "audioonly" });
+    resource = createAudioResource(stream, { seek: 0, volume: 0.8 });
   } else {
     resource = createAudioResource(
       join(__dirname, "../", "audio", `${link}.mp3`),
-      { volume: 0.8 }
+      { volume: 0.8, inlineVolume: true }
     );
   }
 
@@ -68,7 +64,8 @@ async function playAudio(channelId, guildId, voiceAdapterCreator, link) {
   });
 
   player.on(AudioPlayerStatus.Idle, () => {
-    console.log("nothing");
+    console.log("Finished");
+    player.stop();
     connection.destroy();
   });
 }
