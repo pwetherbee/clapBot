@@ -19,6 +19,12 @@ const commands = [
       option.setName("input").setDescription("Enter a string")
     ),
   new SlashCommandBuilder()
+    .setName("clp")
+    .setDescription("Replies with clap command")
+    .addStringOption((option) =>
+      option.setName("input").setDescription("Enter a string")
+    ),
+  new SlashCommandBuilder()
     .setName("server")
     .setDescription("Replies with server info!"),
   new SlashCommandBuilder()
