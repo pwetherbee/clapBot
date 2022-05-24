@@ -9,7 +9,10 @@ const {
 } = require("@discordjs/voice");
 
 const ytdl = require("ytdl-core");
-
+// const resource = createAudioResource(
+//   join(__dirname, "../", "mp3s", "cabbages.mp3"),
+//   { volume: 1 }
+// );
 module.exports = {
   data: new SlashCommandBuilder()
     .setName("clp")
@@ -68,20 +71,21 @@ async function playAudio(channelId, guildId, voiceAdapterCreator, link) {
 
   const player = createAudioPlayer();
   connection.subscribe(player);
-  const resource = createAudioResource(
-    join(__dirname, "../", "mp3s", "cabbages.mp3")
-  );
+
+  console.log(join(__dirname, "../", "audio", "cabbages.mp3"));
 
   console.log("joined channel");
-  const stream = ytdl(link, { filter: "audioonly" });
-  //   var resource = createAudioResource(stream, { seek: 0, volume: 1 });
+  const stream = ytdl(link, { filter: "audioonly", type: "opus" });
+  var resource = createAudioResource(stream, { seek: 0, volume: 1 });
   player.play(resource);
   player.on("error", (error) => {
     console.error(
       `Error: ${error.message} with resource ${error.resource.metadata.title}`
     );
   });
+
   player.on(AudioPlayerStatus.Idle, () => {
     console.log("nothing");
+    connection.destroy();
   });
 }

@@ -11,7 +11,13 @@ GUILD = process.env.DISCORD_GUILD;
 ADMIN_CODE = process.env.ADMIN_CODE;
 
 const { Client, Intents, Collection } = require("discord.js");
-const client = new Client({ intents: [Intents.FLAGS.GUILDS] });
+const client = new Client({
+  intents: [
+    Intents.FLAGS.GUILDS,
+    Intents.FLAGS.GUILD_VOICE_STATES,
+    Intents.FLAGS.GUILD_MESSAGE_REACTIONS,
+  ],
+});
 
 client.commands = new Collection();
 const commandsPath = path.join(__dirname, "commands");

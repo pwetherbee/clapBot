@@ -19,10 +19,13 @@ const commands = [
       option.setName("input").setDescription("Enter a string")
     ),
   new SlashCommandBuilder()
-    .setName("clp")
-    .setDescription("Replies with clap command")
-    .addStringOption((option) =>
-      option.setName("input").setDescription("Enter a string")
+    .setName("stop")
+    .setDescription("Stops the clapbot audio"),
+  new SlashCommandBuilder()
+    .setName("clapsearch")
+    .setDescription("Returns a list of clap commands")
+    .addIntegerOption((option) =>
+      option.setName("page").setDescription("Enter a page number")
     ),
   new SlashCommandBuilder()
     .setName("server")

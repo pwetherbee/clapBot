@@ -1,15 +1,74 @@
 const { SlashCommandBuilder } = require("@discordjs/builders");
+const { createReadStream } = require("node:fs");
+const { join } = require("node:path");
+const {
+  joinVoiceChannel,
+  createAudioPlayer,
+  createAudioResource,
+  AudioPlayerStatus,
+} = require("@discordjs/voice");
+
+const ytdl = require("ytdl-core");
 
 module.exports = {
   data: new SlashCommandBuilder()
     .setName("clap")
-    .setDescription("Replies with a clap command!")
+    .setDescription("Replies with a audio!")
     .addStringOption((option) =>
       option.setName("input").setDescription("Enter a string")
     ),
   async execute(interaction) {
-    console.log(interaction.options);
     const string = interaction.options.getString("input");
+    console.log("audio string:", string);
+    await playAudio(
+      interaction.member.voice.channel.id,
+      interaction.guildId,
+      interaction.guild.voiceAdapterCreator,
+      string
+    );
+
     await interaction.reply(`clapping ${string}`);
+    const message = await interaction.fetchReply();
+    message.react("👏");
   },
 };
+
+async function playAudio(channelId, guildId, voiceAdapterCreator, link) {
+  const connection = await joinVoiceChannel({
+    channelId: channelId,
+    guildId: guildId,
+    adapterCreator: voiceAdapterCreator,
+  });
+  console.log(link);
+
+  const player = createAudioPlayer();
+  connection.subscribe(player);
+
+  console.log(join(__dirname, "../", "audio", `${link}.mp3`));
+
+  console.log("joined channel");
+
+  let resource;
+
+  if (link.startsWith("https://")) {
+    const stream = ytdl(link, { filter: "audioonly", type: "opus" });
+    resource = createAudioResource(stream, { seek: 0, volume: 1 });
+  } else {
+    resource = createAudioResource(
+      join(__dirname, "../", "audio", `${link}.mp3`),
+      { volume: 0.8 }
+    );
+  }
+
+  player.play(resource);
+  player.on("error", (error) => {
+    console.error(
+      `Error: ${error.message} with resource ${error.resource.metadata.title}`
+    );
+  });
+
+  player.on(AudioPlayerStatus.Idle, () => {
+    console.log("nothing");
+    connection.destroy();
+  });
+}
