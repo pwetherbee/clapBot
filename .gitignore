@@ -5,3 +5,5 @@ tracker/
 ### temps ###
 tempAudioFiles/
 tracker/accounts.txt
+node_modules
+Udemy
