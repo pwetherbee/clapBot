@@ -48,7 +48,7 @@ async function playAudio(channelId, guildId, voiceAdapterCreator, link) {
 
   if (link.startsWith("https://")) {
     const stream = ytdl(link, { filter: "audioonly" });
-    resource = createAudioResource(stream, { seek: 0, volume: 0.8 });
+    resource = createAudioResource(stream, { seek: 0, volume: 0.6 });
   } else {
     resource = createAudioResource(
       join(__dirname, "../", "audio", `${link}.mp3`),
@@ -59,8 +59,9 @@ async function playAudio(channelId, guildId, voiceAdapterCreator, link) {
   player.play(resource);
   player.on("error", (error) => {
     console.error(
-      `Error: ${error.message} with resource ${error.resource.metadata.title}`
+      `Error: ${error.message} with resource ${error.resource.metadata?.title}`
     );
+    console.error(error.resource);
   });
 
   player.on(AudioPlayerStatus.Idle, () => {
